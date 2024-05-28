@@ -10,7 +10,6 @@ import stanza
 import joblib
 
 # NLTK Türkçe stopwords'leri indir
-nltk.download('stopwords')
 
 # Türkçe stopwords'ler
 stop_words = set(stopwords.words('turkish'))
