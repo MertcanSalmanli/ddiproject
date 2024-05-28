@@ -1,13 +1,14 @@
 #--MLP MODEL EĞİTİMİ--
 
-
 import pandas as pd
 import numpy as np
+import streamlit as st
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
-import streamlit as st
+from tensorflow.keras.layers import LSTM, Dense, Input
+from tensorflow.keras.utils import to_categorical
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 # CSV dosyasından veriyi yükleme
