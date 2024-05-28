@@ -5,7 +5,6 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-import  gensim
 import re
 import stanza
 import joblib
