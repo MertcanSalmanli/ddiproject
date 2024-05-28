@@ -10,7 +10,6 @@ import stanza
 import joblib
 
 # NLTK Türkçe stopwords'leri indir
-nltk.download('punkt')
 nltk.download('stopwords')
 
 # Türkçe stopwords'ler
