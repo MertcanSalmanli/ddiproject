@@ -12,7 +12,6 @@ import joblib
 # NLTK Türkçe stopwords'leri indir
 
 # Türkçe stopwords'ler
-stop_words = set(stopwords.words('turkish'))
 
 # Stanza pipeline'ını indir
 stanza.download('tr')
