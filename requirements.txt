@@ -7,5 +7,4 @@ nltk
 stanza
 gensim
 Word2Vec                                       
-re
 joblib
