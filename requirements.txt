@@ -9,6 +9,6 @@ gensim
 Word2Vec                                       
 joblib
 scipy
-
+plotly
 
 
