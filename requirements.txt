@@ -1,4 +1,4 @@
-gensim~=4.2.0
+gensim
 numpy
 pandas
 tensorflow
