@@ -6,3 +6,4 @@ scikit-learn
 nltk
 stanza
 gensim
+Word2Vec                                       
