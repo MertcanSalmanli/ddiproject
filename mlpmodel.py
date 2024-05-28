@@ -12,34 +12,7 @@ label_encoder = joblib.load('label_encoder.pkl')
 
 # Fonksiyonlar
 
-def haber_metnini_islemle(haber_metni):
-  # Metni ön işleme
-  metin = haber_metni.lower()  # Metni küçük harf yapma
-  metin = metin.replace('[URL]', '')  # URL'leri kaldırma
-  metin = metin.replace('[IMG]', '')  # Görselleri kaldırma
-  metin = metin.replace('...', '')  # Elipsleri kaldırma
-  metin = metin.replace('"', '')  # Tırnak işaretlerini kaldırma
-  metin = metin.replace("'", '')  # Tek tırnak işaretlerini kaldırma
-  metin = metin.replace(':', '')  # İki nokta işaretlerini kaldırma
-  metin = metin.replace(';', '')  # Virgül işaretlerini kaldırma
-  metin = metin.replace('!', '')  # Ünlem işaretlerini kaldırma
-  metin = metin.replace('?', '')  # Soru işaretlerini kaldırma
-  metin = metin.replace('(', '')  # Parantezleri kaldırma
-  metin = metin.replace(')', '')  # Parantezleri kaldırma
-  metin = metin.replace('{', '')  # Küme parantezlerini kaldırma
-  metin = metin.replace('}', '')  # Küme parantezlerini kaldırma
-  metin = metin.replace('[', '')  *Köşeli parantezleri kaldırma*
-  metin = metin.replace(']', '')  *Köşeli parantezleri kaldırma*
-  metin = metin.replace('<', '')  *Küçük ayraçları kaldırma*
-  metin = metin.replace('>', '')  *Büyük ayraçları kaldırma*
-  metin = metin.replace('|', '')  *Çubuk işaretlerini kaldırma*
-  metin = metin.replace('\\', '')  *Ters eğik çizgileri kaldırma*
-  metin = metin.replace('/', '')  *Eğik çizgileri kaldırma*
-  metin = metin.replace('—', '')  *Uzun çizgiyi kaldırma*
-  metin = metin.replace('–', '')  *Uzun çizgiyi kaldırma*
-  metin = metin.replace('…', '')  *Elipsleri kaldırma*
-  metin = metin.split()  # Kelimeleri listeye ayırma
-  return metin
+
 
 def haber_turunu_tahmin_et(haber_metni):
   # Metni işleme
