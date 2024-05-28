@@ -6,9 +6,7 @@ scikit-learn
 nltk
 stanza
 gensim
-Word2Vec                                       
 joblib
 scipy
 plotly
-
-
+streamlit-aggrid
