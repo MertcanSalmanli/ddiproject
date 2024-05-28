@@ -13,7 +13,7 @@ data = pd.read_csv('vektorlenen_dosya.csv')
 
 # Etiketler ve özelliklerin ayrılması
 etiketler = data['Etiket']
-X_texts = data['Text']  # Metin verisini alıyoruz
+X_texts = data['Processed_Haber']  # Metin verisini alıyoruz
 
 # Etiketleri sayısal değerlere dönüştürme
 label_encoder = LabelEncoder()
