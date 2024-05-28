@@ -5,7 +5,8 @@ import streamlit as st
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
 from nltk.tokenize import word_tokenize
-from nltk.corpus import stop_words
+from nltk.corpus import stopwords
+
 from gensim.models import Word2Vec
 import re
 from stanza.nlp import Pipeline
