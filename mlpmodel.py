@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten
+import streamlit as st
+
 
 # CSV dosyasından veriyi yükleme
 data = pd.read_csv('vektorlenen_dosya.csv')
