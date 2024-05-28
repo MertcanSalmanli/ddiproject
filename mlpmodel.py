@@ -1,5 +1,3 @@
-#--MLP MODEL EĞİTİMİ--
-
 import pandas as pd
 import numpy as np
 import streamlit as st
@@ -10,37 +8,46 @@ from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.utils import to_categorical
 from sklearn.feature_extraction.text import CountVectorizer
 
-
 # CSV dosyasından veriyi yükleme
 data = pd.read_csv('vektorlenen_dosya.csv')
 
 # Etiketler ve özelliklerin ayrılması
 etiketler = data['Etiket']
-X = data.drop('Etiket', axis=1).values
+X_texts = data['Text']  # Metin verisini alıyoruz
 
 # Etiketleri sayısal değerlere dönüştürme
 label_encoder = LabelEncoder()
 etiketler = label_encoder.fit_transform(etiketler)
+num_classes = len(np.unique(etiketler))
+etiketler = to_categorical(etiketler)
+
+# Metin verilerini vektörleştirme
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(X_texts).toarray()
 
 # Verileri eğitim ve test setlerine ayırma
 X_train, X_test, y_train, y_test = train_test_split(X, etiketler, test_size=0.2, random_state=42)
 
-# MLP modeli
-mlp_model = Sequential()
-mlp_model.add(Flatten(input_shape=(X_train.shape[1],)))  # Giriş 
-mlp_model.add(Dense(128, activation='relu'))  # Gizli 
-mlp_model.add(Dense(np.max(etiketler) + 1, activation='softmax'))  # Çıkış 
+# LSTM modeline uygun forma getirme
+X_train = X_train.reshape((X_train.shape[0], X_train.shape[1], 1))
+X_test = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
+
+# LSTM modeli
+model = Sequential()
+model.add(Input(shape=(X_train.shape[1], 1)))  # Giriş katmanı
+model.add(LSTM(100))
+model.add(Dense(num_classes, activation='softmax'))
 
 # Modeli uygula
-mlp_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Modeli eğitme
-mlp_model.fit(X_train, y_train, epochs=30, batch_size=32, validation_split=0.2)
+model.fit(X_train, y_train, epochs=30, batch_size=32, validation_split=0.2)
 
 # Modeli değerlendirme
-mlp_loss, mlp_accuracy = mlp_model.evaluate(X_test, y_test)
-print("Test Loss (MLP):", mlp_loss)
-print("Test Accuracy (MLP):", mlp_accuracy)
+loss, accuracy = model.evaluate(X_test, y_test)
+st.write("Test Loss:", loss)
+st.write("Test Accuracy:", accuracy)
 
 # Streamlit arayüzü
 st.title('Haber Etiketleme Tahmini')
@@ -48,8 +55,7 @@ input_text = st.text_area("Bir haber yazısı girin ve hangi etikete ait olduğu
 
 if st.button('Tahmin Et'):
     if input_text:
-        # Yazıyı vektörize etme (Burada bir örnek veriyorum, sizin vektörleme yönteminiz farklı olabilir)
-        vectorizer = CountVectorizer()
+        # Yazıyı vektörize etme
         input_vector = vectorizer.transform([input_text]).toarray()
         
         # Modelin girişine uygun hale getirme
