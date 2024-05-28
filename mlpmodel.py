@@ -1,31 +1,12 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
+import streamlit as st
 from tensorflow.keras.models import load_model
-import joblib
-import re
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import stanza
-from gensim.models import Word2Vec
+from sklearn.preprocessing import LabelEncoder
 
-# NLTK Türkçe stopwords ve tokenizerlar
-nltk.download('punkt')
-nltk.download('stopwords')
-
-# Türkçe stopwords'ler
-stop_words = set(stopwords.words('turkish'))
-
-# Stanza 
-stanza.download('tr')
-nlp = stanza.Pipeline(lang='tr', processors='tokenize,mwt,pos,lemma')
-
-# Haber metnini işlemek için bir fonksiyon
-def haber_metnini_islemle(haber_metni):
-    # Gerekli ön işlemleri yapın ve vektörleştirin
-    text = haber_metni.lower()
+# önişleme
+def preprocess_text(text):
+    text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)
     text = re.sub(r'\d+', '', text)
     tokens = word_tokenize(text)
@@ -36,23 +17,45 @@ def haber_metnini_islemle(haber_metni):
         for sent in doc.sentences:
             for word in sent.words:
                 lemmatized_tokens.append(word.lemma)
-    # Burada vektörleştirme işlemini yapın
-    word_vectors = [model.wv[word] for word in lemmatized_tokens if word in model.wv]
+    return lemmatized_tokens
+
+# vektörize etme
+model = Word2Vec(sentences=haber_metni, vector_size=100, window=5, min_count=1, workers=4)
+def vectorize_text(text, model):
+    words = text.split()
+    word_vectors = [model.wv[word] for word in words if word in model.wv]
     if len(word_vectors) > 0:
         return np.mean(word_vectors, axis=0)
     else:
         return np.zeros(model.vector_size)
 
-# Streamlit uygulamasını oluşturma
-st.title("Haber Türü Tahmini")
 
-# Haber metnini giriş alanı
-haber_metni = st.text_area("Haber Metni", "")
+# Model ve label encoder'ı yükleme
+model = load_model('mlp_model.h5')
+label_encoder = joblib.load('label_encoder.pkl')
 
-# Tahmin et butonu
-if st.button("Tahmin Et"):
-    # Tahmin etme işlemi
-    tahmin = haber_turunu_tahmin_et(haber_metni)
+# Streamlit uygulaması
+st.title("Haber Kategorisi Tahmini")
+
+# Metin girdisi için alan oluşturma
+haber_metni = st.text_input("Haber Metnini Giriniz:")
+
+# Tahmin butonu
+if st.button("Tahmin Yap"):
+    # Metni ön işleme
+    # ... (Metin ön işleme işlemlerini ekleyin)
     
-    # Tahmini sonucu kullanıcıya gösterme
-    st.write("Tahmin Edilen Haber Türü:", tahmin)
+    
+    # Metni sayısal diziye dönüştürme
+    # ... (Metni sayısal diziye dönüştürme işlemlerini ekleyin)
+    X_test=vectorize_text(preprocess_text(haber_metni))
+    
+    # Tahmini yapma
+    tahmin = model.predict(X_test)
+    tahmin = np.argmax(tahmin)
+
+    # Tahmini kategoriyi deşifre etme
+    tahmin_kategorisi = label_encoder.inverse_transform([tahmin])[0]
+
+    # Sonucu ekrana yazdırma
+    st.write(f"Tahmin Edilen Kategori: {tahmin_kategorisi}")
