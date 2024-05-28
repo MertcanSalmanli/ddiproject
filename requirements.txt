@@ -1,5 +1,5 @@
-numpy==1.26.4
-pandas==2.2.2
+numpy
+pandas
 tensorflow
 streamlit
 scikit-learn
@@ -7,3 +7,5 @@ nltk
 stanza
 gensim
 Word2Vec                                       
+re
+joblib
